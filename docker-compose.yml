@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+
+  jenkins:
+    container_name: jenkins-iac
+    image: jenkins-iac
+    environment:
+      - "DOCKER_HOST=tcp://docker:2376"
+      - "DOCKER_CERT_PATH=/certs/client"
+      - "DOCKER_TLS_VERIFY=1"
+    expose:
+      - "8000"
+      - "50000"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    restart: unless-stopped
+    volumes:
+      - "jenkins-docker-certs:/certs/client:ro"
+      - "jenkins-data:/var/jenkins_home"
+    depends_on:
+      - docker
+
+  docker:
+    container_name: docker-dind
+    image: docker:dind
+    environment:
+      - "DOCKER_TLS_CERTDIR=/certs"
+    expose:
+      - "2376"
+    restart: unless-stopped
+    volumes:
+      - "jenkins-docker:/var/lib/docker"
+      - "jenkins-docker-certs:/certs/client"
+      - "jenkins-data:/var/jenkins_home"
+    privileged: true
+
+volumes:
+  jenkins-docker:
+  jenkins-docker-certs:
+  jenkins-data:
