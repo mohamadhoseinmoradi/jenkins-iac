@@ -16,6 +16,11 @@ services:
       - "8080:8080"
       - "50000:50000"
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2g
     volumes:
       - "jenkins-docker-certs:/certs/client:ro"
       - "jenkins-data:/var/jenkins_home"
