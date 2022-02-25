@@ -5,7 +5,11 @@ RUN apt update && \
     apt install -y apt-transport-https \
     ca-certificates \
     gnupg-agent \
-    software-properties-common
+    software-properties-common \
+    python3-pip
+
+# install pytest
+RUN pip install pytest
 
 # install docker cli
 RUN \
